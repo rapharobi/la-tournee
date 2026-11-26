@@ -8,7 +8,7 @@ Jeu de plateau pour soirées, à la façon d'un party game : **le PC sert d'écr
 2. Chaque joueur scanne le QR code avec son téléphone, choisit un pseudo, une couleur et éventuellement une photo.
 3. Choisissez l'ambiance (Tranquille, Corsé, Sans filtre), les thèmes et la durée (15 tours ≈ 1 h 30).
 
-Au programme : action ou vérité, « Je n'ai jamais », « Qui de nous… », sondages et confessions anonymes, « Tu me connais ? », duels, 29 mini-jeux (dont des jeux d'action au joystick : Chifoumi arena, La Bombe, Open bar, Bagarre de bar, Pluie de bouchons), dé animé et roues pour les cases Drink, Vêtement et Taffe et vos propres cartes.
+Au programme : action ou vérité, « Je n'ai jamais », « Qui de nous… », sondages et confessions anonymes, « Tu me connais ? », duels, 30 mini-jeux (dont des jeux d'action au joystick : Chifoumi arena, La Bombe, Open bar, Bagarre de bar, Pluie de bouchons), dé animé et roues pour les cases Drink, Vêtement et Taffe et vos propres cartes.
 
 ⚠️ Les thèmes alcool, drogue et sexe sont réservés aux adultes (18+). Buvez avec modération : le mode « jetons » permet de jouer sans alcool.
 
