@@ -7,6 +7,7 @@ Jeu de plateau pour soirées, à la façon d'un party game : **le PC sert d'écr
 1. Ouvrez le lien sur un PC ou une télé (ou, sans écran, sur un téléphone avec « Jouer avec les téléphones seuls »).
 2. Chaque joueur scanne le QR code avec son téléphone, choisit un pseudo, une couleur et éventuellement une photo.
 3. Choisissez l'ambiance (Tranquille, Corsé, Sans filtre), les thèmes et la durée (15 tours ≈ 1 h 30).
+4. Pas assez de monde ? Ajoutez des **bots** 🤖 dans le salon : ils jouent avec vous, et ils parlent (à voix haute ou en bulles) pour balancer des dingueries tout au long de la soirée.
 
 Au programme : action ou vérité, « Je n'ai jamais », « Qui de nous… », sondages et confessions anonymes, « Tu me connais ? », duels, 30 mini-jeux (dont des jeux d'action au joystick : Chifoumi arena, La Bombe, Open bar, Bagarre de bar, Pluie de bouchons), dé animé et roues pour les cases Drink, Vêtement et Taffe et vos propres cartes.
 

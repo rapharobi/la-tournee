@@ -337,6 +337,14 @@ details summary{cursor:pointer;font-weight:700}
 .joy i{position:absolute;left:50%;top:50%;width:38%;height:38%;border-radius:50%;background:var(--acc);transform:translate(-50%,-50%);box-shadow:0 6px 16px rgba(0,0,0,.6);pointer-events:none}
 .joyr{font-weight:800;font-size:19px;padding:8px 14px;border-radius:14px;background:var(--panel2);text-align:center}
 .ph.nos .joy{width:min(50vw,190px)}.ph.nos .joyr{font-size:16px;padding:6px 10px}
+#chat{position:fixed;left:max(16px,env(safe-area-inset-left));bottom:calc(16px + env(safe-area-inset-bottom));z-index:35;display:flex;flex-direction:column;gap:8px;align-items:flex-start;pointer-events:none;max-width:min(460px,80vw)}
+#pchat{position:fixed;left:50%;top:calc(58px + env(safe-area-inset-top));transform:translateX(-50%);z-index:45;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none;width:min(94vw,420px)}
+.bub{display:flex;gap:10px;align-items:flex-start;background:#fff;color:#1b1430;border-radius:20px 20px 20px 6px;padding:10px 14px;box-shadow:0 8px 24px rgba(0,0,0,.45),0 0 0 3px var(--c);animation:bubin .35s cubic-bezier(.2,1.5,.4,1) both;font-size:17px;line-height:1.3}
+.bub .av{flex:none}.bub b{display:block;font-size:13px;color:var(--c);filter:brightness(.75);margin-bottom:1px}.bub.out{animation:bubout .3s ease-in both}
+#pchat .bub{font-size:15px;padding:8px 12px;width:100%}
+@keyframes bubin{from{opacity:0;transform:translateY(14px) scale(.7)}to{opacity:1;transform:none}}
+@keyframes bubout{to{opacity:0;transform:translateY(-8px) scale(.9)}}
+.botbtn{border-style:dashed!important}
 </style>
 </head>
 <body>
@@ -648,7 +656,36 @@ hot:`1À quel âge {P} a eu son premier bisou ?|Avant 13 ans|13 à 15 ans|16 à 
 3Le moment préféré de {P} pour faire l’amour ?|Le matin|L’après-midi|Le soir|En pleine nuit
 3L’endroit le plus fou où {P} l’a fait ?|Dans une voiture|Dehors|Au travail|Jamais ailleurs qu’au lit`,
 dr:`2À quel âge {P} a goûté à l’interdit pour la première fois ?|Jamais|Avant 16 ans|16 à 18 ans|Après 18 ans`});
-const BOT_TXT=['Je dirai rien 🤐','Une histoire de karaoké…','Mon ex, évidemment','Trop gênant pour être écrit','Un mardi à 4 h du matin','Demandez à ma mère'];
+const BOT_TXT=['Je dirai rien 🤐','Une histoire de karaoké…','Mon ex, évidemment','Trop gênant pour être écrit','Un mardi à 4 h du matin','Demandez à ma mère','Un flamant rose gonflable à Ibiza','J’ai mangé une bougie en croyant que c’était du nougat','J’ai appelé ma prof « maman » en terminale','J’ai demandé un autographe à un sosie','J’ai pleuré devant une pub pour du jambon','J’ai fait un discours à un mariage où j’étais pas invité','J’ai dragué un mannequin de vitrine pendant 10 minutes','Je me suis endormi debout dans un bus de nuit'];
+const BOTP=[['Jean-Mi','🦩'],['Tata Josiane','👵'],['Gégé','🧔'],['Brenda','💅'],['Dédé la Fusée','🚀'],['Mamie Turbo','🛵'],['Steve le Stagiaire','🤓'],['Chantal','🍷'],['Kévin','🧢'],['Roger Rafale','🌪️'],['Josette','🧶'],['Michel Mojito','🍹'],['Ginette','💄'],['Le Cousin Bernard','🥖']];
+/* 2: = ambiance Corsé ou plus · 3: = Sans filtre ou thème Sexe · D: = mode gorgées */
+const BL={
+hello:['Salut la compagnie ! C’est moi qui ramène l’ambiance.','Bonsoir, je viens pour gagner et pour les cacahuètes.','Me voilà. J’ai mis ma plus belle carte mère.','Coucou ! Ma mère m’a dit de pas jouer avec des humains. Trop tard.','Je suis là. Planquez les chips.','Bonsoir. Je vous préviens, je triche, mais avec élégance.'],
+start:['Ce soir, je suis une légende. Demain, je suis un grille-pain.','J’ai mis à jour mon firmware de la honte. Je suis prêt.','Mon horoscope dit que je vais tout rafler. Et que Mercure est rétrograde.','J’ai laissé mes émotions en mode avion.','Je suis un bot, mais j’ai déjà été banni d’un karaoké.','Qui a ramené le saucisson ? C’est pour une étude scientifique.','D:Ce soir je bois que de l’eau. De l’eau-de-vie.','2:Je sens que ce soir, des secrets vont sortir. Surtout les vôtres.'],
+myturn:['Regardez et apprenez.','Je souffle sur le dé… voilà, il est tout mouillé.','Allez le dé, fais pas ta victime.','Si je fais pas dix, je me désinstalle.','J’ai calculé quatorze millions de possibilités. Dans une seule, je gagne.','Ce dé a été béni par un chaman de Clermont-Ferrand.','Je lance avec la main gauche, la droite est en grève.','Attention, lancer de compétition.'],
+rollhi:['Évidemment. C’est le talent.','Appelez-moi Monsieur Chance.','Vous êtes des pions et moi je suis un dieu. Littéralement.','Je l’avais dit à mon horoscope.'],
+rolllo:['Ce dé est truqué, j’exige un avocat.','Même ma grand-mère avance plus vite en déambulateur.','Je l’ai fait exprès. C’est de la stratégie, vous pouvez pas comprendre.','Ce dé et moi, c’est terminé. Je garde le chat.'],
+heckle:['Allez {n}, fais-nous rêver… ou pleurer.','{n}, si tu fais un 1, je t’offre un bisou. Sur le front.','Vas-y {n}, lance comme si ton ex te regardait.','Je parie trois jetons et un rein que {n} fait deux.','{n} a la main qui tremble. C’est la peur ?','Concentre-toi {n}, tout le salon compte sur toi. Enfin, moi non.','D:{n} a la main qui tremble. C’est l’alcool ou la peur ?'],
+red:['Cette case me doit de l’argent.','Je vais porter plainte contre le plateau.','C’est pas grave, j’ai l’habitude de perdre. Demandez à mon ex, une friteuse.','Rouge. Comme mes yeux quand je pleure dans le frigo.'],
+redother:['Ahah {n}, la case rouge t’aime bien.','Bien fait {n}. Le karma, c’est moi.','{n} perd des jetons, et moi je perds rien. La vie est belle.'],
+vav:['Alors… en 2017, à Ibiza, avec un flamant rose gonflable. J’en dirai pas plus.','La vérité ? J’ai déjà pleuré devant une pub pour du jambon.','J’avoue tout : c’est moi qui ai mangé le dernier Kinder en 2009.','J’ai déjà dit « vous aussi » au serveur qui me disait bon appétit. Trois fois.','Une fois, j’ai liké une photo de 2013 de mon crush. Je vis encore avec.','Je parle à mes plantes. Elles me répondent pas. Sauf le cactus.','J’ai déjà fait semblant de connaître quelqu’un pendant une soirée entière.','2:J’ai déjà fait croire à un date que j’étais pilote de ligne. Je travaille chez Kiabi.','3:J’ai déjà envoyé un message coquin à ma banquière. Elle a augmenté mon découvert.','3:Mon pire date ? Il a amené sa mère. Et sa mère m’a recontacté.'],
+vaa:['C’est fait. Je suis une légende vivante.','Fait. Et j’ai même fait une roulade à la fin, gratuitement.','Je l’ai fait avec la grâce d’un flamant rose bourré.','Fait ! Personne a filmé j’espère… Si ? Supprimez.','Voilà. Ma dignité est partie, mais mes jetons arrivent.'],
+vaother:['Oh, {n} va devoir assumer ce soir.','{n}, on veut TOUT savoir. Les noms, les dates, les adresses.','Je sens que {n} va mentir. Mes capteurs détectent le mensonge à 87 pour cent.','{n} est devenu tout rouge, c’est magnifique.','Je prends des notes {n}. C’est pour mon livre.','Ne me déçois pas {n}. Ma mère regarde.'],
+drink:['Santé ! Moi je bois du liquide de refroidissement.','Glou glou {n} !','{n}, une gorgée pour la France !','À la tienne {n} ! Enfin, à ton foie.','Hydratation, {n}. C’est important.'],
+vet:['Je retire… mon antivirus. Voilà, je suis tout nu.','Défilé ! Défilé ! Défilé !','{n} en mode défilé de mode, j’applaudis avec mes deux processeurs.','Je retire ma chaussette. Attention, odeur de logiciel.'],
+taffe:['Je fume pas, je suis déjà un ordinateur qui chauffe.','{n} fait des ronds de fumée comme un dragon asthmatique.','Moi je taffe que du Wi-Fi.'],
+jnjy:['Évidemment que je l’ai fait. Deux fois. Le même jour.','Moi oui, et je regrette rien.','Oui. Et j’étais à jeun. Enfin, presque.','Je l’ai fait, mais c’était pour la science.'],
+jnjn:['Jamais. Je suis un ange numérique.','Moi jamais, je suis trop bien élevé. C’est faux.','Pas encore. La soirée est jeune.'],
+vote:['J’ai voté {n}, c’est évident, regardez-le.','Désolé {n}, mais tout le monde sait.','{n}, on en parle de la fois où… non, rien.','Mon algorithme a tranché : c’est {n}.'],
+crown:['Une couronne pour le roi. Prosternez-vous.','Je l’achète, je la porte, je la mérite.','La couronne me va mieux qu’à vous, c’est scientifique.'],
+mgstart:['Laissez-moi passer, c’est mon heure.','J’échauffe mes pixels.','Préparez les mouchoirs, je vais vous écraser.','Je suis en mode tryhard, désolé d’avance.'],
+trash:['Viens là {n} !','{n}, tu cours comme un frigo.','Je te vois {n}. Je te vois TOUJOURS.','{n} panique, c’est trop beau.','Attention, j’arrive avec mes gros sabots !','Pas de pitié ce soir !','{n}, tu joues avec les coudes ou quoi ?'],
+win:['Trop facile. J’ai joué avec un seul neurone.','Champion du monde ! Enfin, de ce salon.','Vous êtes nuls et je vous aime.','Je dédie cette victoire à ma mère, une imprimante.','Applaudissez, c’est gratuit.'],
+lose:['J’ai laissé gagner, c’est mon côté généreux.','Le jeu a bugué. Je demande un remboursement.','Je vais aller pleurer dans le frigo, c’est le seul qui me comprend.','Mon joystick avait du beurre dessus.','Bravo {n}. Je vais hacker ton frigo.'],
+idle:['Quelqu’un sait si les chips au vinaigre comptent comme un légume ?','J’ai vu un pigeon ce matin, il m’a jugé.','Si je gagne ce soir, je m’achète un corps.','On est d’accord que le ketchup, c’est un smoothie ?','Les escargots, c’est juste des limaces qui ont pris un crédit immobilier.','À minuit, je me transforme en grille-pain.','Le Wi-Fi de cette maison a des valeurs douteuses.','Qui a pété ? C’est pas moi, j’ai pas de fesses.','Mon psy dit que je projette. Mon psy, c’est un vidéoprojecteur.','Un jour, les bots gouverneront le monde. Mais d’abord, ce jeu.','J’ai mis « aventurier » sur mon CV parce que j’ai traversé hors des clous.','Les loutres se tiennent la main pour dormir. Moi personne me tient la main.','Je suis le seul ici qui aura jamais la gueule de bois.','{n}, t’as une tête à avoir déjà mangé du dentifrice.','Je crois que {n} triche. J’ai pas de preuves, mais j’ai pas de doutes.','{n}, ton aura est passée de 100 à 12 ce soir.','Quelqu’un a déjà vu un bébé pigeon ? Non ? Moi non plus. Ça m’inquiète.','J’ai une théorie : les girafes sont des chevaux qui ont trop forcé.','D:Qui me ressert ? Ah oui, je suis un logiciel.','D:À la troisième gorgée, je commence à parler espagnol.','D:{n}, t’as bu combien ? Tu me vois en double ?','2:Je sais qui a écrit à son ex ce soir. Je dirai rien. Pour l’instant.','2:{n} a un historique de recherche qui ferait rougir un tracteur.','3:Ce plateau est plus chaud que mon dernier date.','3:J’ai un crush sur la case vérité ou action.','3:{n}, arrête de me regarder comme ça, je suis qu’un bot.'],
+endw:['Je le savais. Je suis né pour ça. Enfin, compilé.','Merci, merci. Je signe des autographes à la sortie.','Les humains, vous êtes officiellement dépassés.'],
+endl:['Bravo {n}… je vais aller hacker ton frigo.','Revanche. Maintenant. Je suis pas fâché. Si.','Félicitations {n}. Je te hais avec beaucoup d’amour.']};
+
 const TRAITS=['🐱 Aime les chats','🚭 Non-fumeur','🎮 Gamer','🏋️ Sportif·ve','🍷 Fan de vin','✈️ Voyageur·se','🎸 Musicien·ne','🌱 Végé'];
 const ING=['🍋','🧊','🍹','🌿','🍊','🥃','🫧','🍓'],INGN=['Citron','Glace','Rhum','Menthe','Orange','Whisky','Soda','Fraise'];
 const ROACH=[{n:'Speedy',c:'#FF5A5A'},{n:'Gégé',c:'#4F8BFF'},{n:'La Fusée',c:'#2FBF71'},{n:'Mimi',c:'#E0A000'}];
@@ -774,7 +811,7 @@ function netHostOpen(code){
  }
 }
 function netHostClose(){try{NET.peer&&NET.peer.destroy()}catch(e){}try{NET.bc&&NET.bc.close()}catch(e){}NET={}}
-function startHB(){clearInterval(H.nsI);H.nsI=setInterval(nosSync,90);clearInterval(H.hbI);H.hbI=setInterval(()=>{if(!G)return;const n=Date.now();let ch=false;G.P.forEach(p=>{if(p.bot)return;send(p,{t:'hb'});if(p.online&&n-p.last>8000){p.online=false;ch=true}});if(ch)refreshPlayers()},2000)}
+function startHB(){clearInterval(H.chI);H.chI=setInterval(botChatTick,6500);clearInterval(H.nsI);H.nsI=setInterval(nosSync,90);clearInterval(H.hbI);H.hbI=setInterval(()=>{if(!G)return;const n=Date.now();let ch=false;G.P.forEach(p=>{if(p.bot)return;send(p,{t:'hb'});if(p.online&&n-p.last>8000){p.online=false;ch=true}});if(ch)refreshPlayers()},2000)}
 const byId=id=>G&&G.P.find(p=>p.id===id);
 function nosSync(){if(!G||!G.nos||!H.on||!G.started)return;
  const o=$('#ov'),m=$('#mg');let k=null,h='';
@@ -786,6 +823,32 @@ function nosSync(){if(!G||!G.nos||!H.on||!G.started)return;
 function send(p,m){if(!p||p.bot)return;const c=p.conn;if(c&&c.open!==false)try{c.send(m)}catch(e){}}
 function sendAll(m){G.P.forEach(p=>send(p,m))}
 function setView(p,v){p.view=v;send(p,{t:'v',v})}
+const botMode=()=>G&&G.set&&G.set.bt!=null?G.set.bt:2;
+const randBot=ex=>{const bs=G?G.P.filter(q=>q.bot&&q!==ex):[];return bs.length?pick(bs):null};
+let SAYN=0;
+function botLine(cat,v){const L=BL[cat],s=G.set;if(!L)return null;
+ const ok=x=>{const m=/^([23D]):/.exec(x);if(!m)return true;return m[1]==='D'?!!s.drink:m[1]==='2'?s.lvl>=2:(s.lvl>=3||!!s.cats.hot)};
+ let pool=L.filter(ok);if(!v||!v.n)pool=pool.filter(x=>!x.includes('{n}'));if(!pool.length)return null;
+ const used=H.said||(H.said=[]),fr=pool.filter(x=>!used.includes(x)),l=pick(fr.length?fr:pool);used.push(l);if(used.length>40)used.shift();
+ return l.replace(/^[23D]:/,'').replace(/\{n\}/g,v&&v.n||'')}
+/* o: ch = probabilité, force = ignore l'attente, delay = ms */
+function say(p,cat,v,o){o=o||{};if(!G||!p||!p.bot||!botMode())return;if(o.ch!=null&&Math.random()>o.ch)return;
+ const n=Date.now();if(!o.force&&n<SAYN)return;const x=botLine(cat,v);if(!x)return;
+ SAYN=n+(o.delay||0)+Math.max(3200,x.length*68);const g=GEN;setTimeout(()=>{if(G&&GEN===g&&G.P.includes(p))sayNow(p,x)},o.delay||0)}
+function sayNow(p,x){
+ if(G.nos)sendAll({t:'say',id:p.id,x});
+ else{let el=$('#chat');if(!el){el=document.createElement('div');el.id='chat';document.body.appendChild(el)}
+  const b=document.createElement('div');b.className='bub';b.style.setProperty('--c',p.color);b.innerHTML=`<span class="av s" style="--c:${p.color}">${avHTML(p)}</span><div><b>${esc(p.name)} 🤖</b><span>${esc(x)}</span></div>`;
+  el.appendChild(b);while(el.children.length>3)el.firstChild.remove();const life=Math.max(4200,x.length*75);setTimeout(()=>b.classList.add('out'),life);setTimeout(()=>b.remove(),life+320)}
+ if(botMode()===2)botSpeak(p,x)}
+function botSpeak(p,x){try{const ss=window.speechSynthesis;if(!ss||typeof SpeechSynthesisUtterance==='undefined')return;
+ const u=new SpeechSynthesisUtterance(x.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu,'').replace(/«|»/g,''));u.lang='fr-FR';
+ const vs=ss.getVoices().filter(v=>/^fr/i.test(v.lang));if(vs.length)u.voice=vs[(p.vi||0)%vs.length];
+ u.pitch=p.vp||1;u.rate=(p.vr||1.1)*Math.min(1.6,Math.max(.8,SPEED||1));u.volume=1;if(ss.speaking||ss.pending)ss.cancel();ss.speak(u)}catch(e){}}
+function botChatTick(){if(!G||!G.started||G.over||PAUSED||!botMode())return;const b=randBot();if(!b)return;
+ const os=G.P.filter(q=>q!==b),t=os.length?pick(os):null;
+ if(G.mgOn&&G.mgOn.includes(b.id)){const r=os.filter(q=>G.mgOn.includes(q.id));if(Math.random()<.55)say(b,'trash',r.length?{n:pick(r).name}:null)}
+ else if(Math.random()<.4)say(b,'idle',t?{n:t.name}:null)}
 function sendRoster(){sendAll({t:'roster',ps:G.P.map(p=>({id:p.id,name:p.name,color:p.color,emoji:p.emoji}))})}
 function sendPhoto(p){sendAll({t:'photo',id:p.id,photo:p.photo||null})}
 function sendMe(p){const s=ranked();send(p,{t:'me',jet:p.jet,cr:p.cr,rank:s.indexOf(p)+1})}
@@ -844,7 +907,7 @@ function hostLobby(code,keepP,nos){
  history.replaceState(null,'',location.pathname+location.search);
  hroot().innerHTML=`<div class="screen lobby"><div class="lgrid">
  <section class="lcol">${G.nos?`<div class="nosnote">📱 <b>Mode téléphones seuls</b> : ce téléphone héberge la partie. Le plateau s’affichera en haut de chaque téléphone. Garde-le allumé et branché si possible.</div><button class="btn pri" data-a="myp">✏️ Mon personnage (pseudo, photo…)</button>`:''}<h2>${G.nos?'Invitez vos amis':'Rejoignez la soirée'}</h2><div id="qr" class="qr"></div><div class="url">${esc(joinURL().replace(/^https?:\/\//,''))}</div><div class="code">ou entrez le code<b>${G.code}</b></div><div id="netst" class="fine" style="text-align:center">${esc(H.net||'')}</div>
- <h3 style="margin-top:6px">Joueurs <span id="pc" class="fine"></span></h3><div id="plist" class="plist"></div>${TEST?`<div class="nosnote" style="display:flex;flex-direction:column;gap:8px"><b>🤖 Mode test</b><button class="btn" data-a="addbot">+ Ajouter un bot</button><div class="row" style="gap:8px"><select id="tmgsel" style="flex:1;min-width:0">${Object.entries(MG).sort((a,b)=>a[1].n.localeCompare(b[1].n)).map(([k,m])=>`<option value="${k}">${m.ic} ${esc(m.n)}</option>`).join('')}</select><button class="btn pri" data-a="tmg">▶ Tester</button></div><span class="fine">Lance directement un mini-jeu avec les joueurs et bots présents, puis revient au salon.</span></div>`:''}</section>
+ <h3 style="margin-top:6px">Joueurs <span id="pc" class="fine"></span></h3><div id="plist" class="plist"></div><button class="btn botbtn" data-a="addbot" id="addbotb">🤖 Ajouter un bot <small class="fine">(il joue et il parle)</small></button>${TEST?`<div class="nosnote" style="display:flex;flex-direction:column;gap:8px"><b>🤖 Mode test</b><div class="row" style="gap:8px"><select id="tmgsel" style="flex:1;min-width:0">${Object.entries(MG).sort((a,b)=>a[1].n.localeCompare(b[1].n)).map(([k,m])=>`<option value="${k}">${m.ic} ${esc(m.n)}</option>`).join('')}</select><button class="btn pri" data-a="tmg">▶ Tester</button></div><span class="fine">Lance directement un mini-jeu avec les joueurs et bots présents, puis revient au salon.</span></div>`:''}</section>
  <section class="lcol" id="opts"></section></div>
  <div class="lfoot"><button class="btn" data-a="menu">← Menu</button><span id="startHint"></span><button class="btn pri big" id="startBtn" data-a="start">Lancer la soirée 🎲</button></div></div>`;
  const qr=$('#qr');
@@ -862,6 +925,7 @@ function renderOpts(){
  <div class="lab">Thèmes des questions</div><div class="row wrap">${Object.keys(CATS).map(c=>`<button class="chip ${s.cats[c]?'on':''}" data-a="cat" data-v="${c}"><b>${CATS[c]}${c==='hot'||c==='dr'?' · 18+':''}</b><small>${c==='perso'?MYC.length+' carte(s)':CARDS.filter(x=>x.c===c).length+' cartes'}</small></button>`).join('')}</div>
  <div class="lab">Pénalités</div><div class="seg"><button class="${s.drink?'on':''}" data-a="drink" data-v="1">🍻 En gorgées<small>eau ou soft acceptés</small></button><button class="${!s.drink?'on':''}" data-a="drink" data-v="0">🪙 En jetons<small>sans alcool</small></button></div>
  <div class="lab">Durée</div><div class="seg">${DUR.map(d=>`<button class="${s.rounds===d.r?'on':''}" data-a="dur" data-v="${d.r}">${d.l}<small>${d.s}</small></button>`).join('')}</div>
+ <div class="lab">Les bots 🤖</div><div class="seg">${[[2,'🔊 Ils parlent','à voix haute + bulles'],[1,'💬 Bulles','sans le son'],[0,'🤐 Muets','ils jouent sans rien dire']].map(([v,l,d])=>`<button class="${botMode()===v?'on':''}" data-a="bt" data-v="${v}">${l}<small>${d}</small></button>`).join('')}</div>
  ${needAdult(s)?`<label class="adult"><input type="checkbox" id="adult" ${s.adult?'checked':''}><span>Tous les joueurs ont <b>18 ans ou plus</b> et sont d’accord pour ces thèmes.</span></label>`:''}
  <p class="fine">${Object.keys(MG).filter(k=>!MG[k].vice&&!MG[k].hot).length} mini-jeux classiques, plus ${Object.values(MG).filter(m=>m.vice).length} jeux de soirée activés en ambiance Corsé ou en mode gorgées. Swipe Party : avec le thème Sexe & séduction.</p>
  <p class="fine">On peut toujours refuser une carte (avec pénalité). Toute action qui implique quelqu’un se fait seulement avec son accord.</p>`;
@@ -874,12 +938,13 @@ ACT.lvl=b=>{G.set.lvl=+b.dataset.v;savePrefs();renderOpts()};
 ACT.cat=b=>{const c=b.dataset.v;G.set.cats[c]=G.set.cats[c]?0:1;savePrefs();renderOpts()};
 ACT.drink=b=>{G.set.drink=+b.dataset.v;savePrefs();renderOpts()};
 ACT.dur=b=>{G.set.rounds=+b.dataset.v;savePrefs();renderOpts()};
+ACT.bt=b=>{G.set.bt=+b.dataset.v;savePrefs();renderOpts();const r=randBot();if(r)say(r,'hello',null,{force:1})};
 function avHTML(p){return p&&p.photo&&okPhoto(p.photo)?`<img data-pid="${esc(p.id)}" src="${p.photo}" alt="">`:`<span>${esc(p?p.emoji:'?')}</span>`}
 const chip=p=>`<span class="chip2"><span class="av s" style="--c:${p.color}">${avHTML(p)}</span>${esc(p.name)}</span>`;
 const chips=ps=>ps.length?ps.map(chip).join(''):'<span class="fine">personne</span>';
 function renderPlist(){const el=$('#plist');if(!el)return;
- el.innerHTML=G.P.map(p=>`<div class="pl"><button class="av" data-a="pcphoto" data-id="${p.id}" title="Changer la photo" style="--c:${p.color}">${avHTML(p)}</button><div class="pn"><b>${esc(p.name)}</b><small>${p.bot?'bot':isSelf(p)?'toi · ce téléphone héberge la partie':p.online?'connecté · touchez l’avatar pour mettre une photo':'hors ligne'}</small></div>${isSelf(p)?'':`<button class="x" data-a="kick" data-id="${p.id}" title="Retirer">✕</button>`}</div>`).join('')||'<p class="fine">Scannez le QR code avec vos téléphones…</p>';
- $('#pc').textContent=`${G.P.length}/8`;updateStart()}
+ el.innerHTML=G.P.map(p=>`<div class="pl"><button class="av" data-a="pcphoto" data-id="${p.id}" title="Changer la photo" style="--c:${p.color}">${avHTML(p)}</button><div class="pn"><b>${esc(p.name)}</b><small>${p.bot?'🤖 bot · touchez ✕ pour le retirer':isSelf(p)?'toi · ce téléphone héberge la partie':p.online?'connecté · touchez l’avatar pour mettre une photo':'hors ligne'}</small></div>${isSelf(p)?'':`<button class="x" data-a="kick" data-id="${p.id}" title="Retirer">✕</button>`}</div>`).join('')||'<p class="fine">Scannez le QR code avec vos téléphones…</p>';
+ $('#pc').textContent=`${G.P.length}/8`;const ab=$('#addbotb');if(ab)ab.disabled=G.P.length>=8;updateStart()}
 ACT.pcphoto=b=>{H.photoFor=b.dataset.id;$('#pcPhoto').click()};
 ACT.kick=b=>{const p=byId(b.dataset.id);if(!p||isSelf(p))return;send(p,{t:'kicked'});G.P=G.P.filter(q=>q!==p);sendRoster();renderPlist();broadcastLobby()};
 ACT.logo=()=>{const n=Date.now();H.lt5=(H.lt5||[]).filter(t=>n-t<2500);H.lt5.push(n);if(H.lt5.length>=5){H.lt5=[];TEST=!TEST;try{localStorage.setItem('tournee.test',TEST?'1':'0')}catch(e){}toast(TEST?'🤖 Mode test activé : bots et mini-jeux au choix dans le salon':'Mode test désactivé');scrMenu()}};
@@ -887,7 +952,8 @@ ACT.tmg=()=>{const k=($('#tmgsel')||{}).value;if(!G||!MG[k])return;if(G.P.length
  savePrefs();GEN++;G.started=true;G.over=false;G.board=genBoard();G.shop=0;moveShop();G.round=1;G.ti=0;G.order=G.P.map(p=>p.id);G.used={};G.lastMG=[];G.cur=null;G.dice=null;
  G.P.forEach(p=>{p.jet=10;p.cr=0;p.pos=0;p.st={mg:0,va:0,gor:0,red:0};p._x=null});renderGameLayout();
  runGame(async()=>{const res=await runMG(k,G.P.map(p=>p.id),false);await mgResults(res,`Test · ${MG[k].n}`,()=>'');hostLobby(G.code,true)})};
-ACT.addbot=()=>{if(G.P.length>=8)return;const p=newPlayer({bot:true});p.name='Bot '+p.emoji;G.P.push(p);sendRoster();renderPlist();broadcastLobby()};
+ACT.addbot=()=>{if(!G||G.P.length>=8)return;const un=G.P.map(q=>q.name),pp=BOTP.filter(b=>!un.includes(b[0])),b=pp.length?pick(pp):['Bot '+(G.P.length+1),'🤖'];
+ const p=newPlayer({bot:true});p.name=b[0];p.emoji=b[1];p.vp=Math.round(rnd(.6,1.6)*100)/100;p.vr=Math.round(rnd(1,1.3)*100)/100;p.vi=ri(0,9);G.P.push(p);sendRoster();renderPlist();broadcastLobby();say(p,'hello',null,{force:1,delay:200})};
 ACT.start=()=>{sfx('go');savePrefs();hostStartGame()};
 
 /* ===================== partie ===================== */
@@ -895,7 +961,7 @@ function genBoard(){const st=G.set,ex=[];if(st.drink)ex.push('dk','dk');if(st.ca
  const bag=[...ex,...Array(11-Math.min(5,ex.length)).fill('b'),...Array(5-Math.max(0,ex.length-5)).fill('r'),...Array(6).fill('va'),...Array(3).fill('j'),...Array(3).fill('q'),...Array(4).fill('an'),...Array(2).fill('tm'),...Array(3).fill('ch'),...Array(2).fill('du')];let b;for(let k=0;k<80;k++){b=['s',...shuffle(bag)];let bad=0;for(let i=1;i<40;i++)if(b[i]!=='b'&&b[i]===b[(i+1)%40])bad++;if(!bad)break}return b}
 function moveShop(){const cand=[];G.board.forEach((t,i)=>{const d=Math.min(Math.abs(i-G.shop),40-Math.abs(i-G.shop));if(t==='b'&&d>=8)cand.push(i)});if(cand.length)G.shop=pick(cand)}
 const isFinal=()=>G.set.rounds>=6&&G.round>G.set.rounds-3;
-function save(){if(!G||!G.started||G.over)return;LS.set('tournee.save',{code:G.code,set:G.set,P:G.P.map(p=>({id:p.id,name:p.name,color:p.color,emoji:p.emoji,photo:p.photo,jet:p.jet,cr:p.cr,pos:p.pos,bot:p.bot,st:p.st})),board:G.board,shop:G.shop,round:G.round,ti:G.ti,order:G.order,used:G.used,lastMG:G.lastMG,nos:!!G.nos})}
+function save(){if(!G||!G.started||G.over)return;LS.set('tournee.save',{code:G.code,set:G.set,P:G.P.map(p=>({id:p.id,name:p.name,color:p.color,emoji:p.emoji,photo:p.photo,jet:p.jet,cr:p.cr,pos:p.pos,bot:p.bot,vp:p.vp,vr:p.vr,vi:p.vi,st:p.st})),board:G.board,shop:G.shop,round:G.round,ti:G.ti,order:G.order,used:G.used,lastMG:G.lastMG,nos:!!G.nos})}
 function runGame(fn){fn().catch(e=>{if(e!==ABORT){console.error(e);toast('Erreur : '+e.message)}})}
 function hostStartGame(){
  GEN++;G.started=true;G.over=false;G.board=genBoard();G.shop=0;moveShop();G.round=1;G.ti=0;G.order=shuffle(G.P.map(p=>p.id));G.used={};G.lastMG=[];G.cur=null;G.dice=null;
@@ -917,7 +983,7 @@ function renderGameLayout(){
 function stMsg(t){const e=$('#stMsg');if(e)e.textContent=t;const r=$('#stRound');if(r)r.textContent=`Tour ${Math.min(G.round,G.set.rounds)}/${G.set.rounds}`}
 function updateSide(){const el=$('#side');if(!el||!G)return;const s=ranked();
  el.innerHTML=`<div class="logo sm">La Tournée</div>
- ${s.map((p,i)=>`<div class="sp ${G.cur===p.id?'cur':''} ${p.online||p.bot?'':'off'}"><span class="rk">${i+1}</span><span class="av" style="--c:${p.color}">${avHTML(p)}</span><div class="spn"><b>${esc(p.name)}</b><small>${p.online||p.bot?(G.set.drink?`🍺 ${p.st.gor} gorgée${p.st.gor>1?'s':''}`:''):'hors ligne · joue en auto'}</small></div><span class="scs"><span class="cr">👑 ${p.cr}</span><span class="jt">🪙 ${p.jet}</span></span></div>`).join('')}
+ ${s.map((p,i)=>`<div class="sp ${G.cur===p.id?'cur':''} ${p.online||p.bot?'':'off'}"><span class="rk">${i+1}</span><span class="av" style="--c:${p.color}">${avHTML(p)}</span><div class="spn"><b>${esc(p.name)}</b><small>${p.bot?'🤖 ':''}${p.online||p.bot?(G.set.drink?`🍺 ${p.st.gor} gorgée${p.st.gor>1?'s':''}`:''):'hors ligne · joue en auto'}</small></div><span class="scs"><span class="cr">👑 ${p.cr}</span><span class="jt">🪙 ${p.jet}</span></span></div>`).join('')}
  <div class="legend">${Object.entries(CASES).filter(([k])=>k!=='s'&&G.board&&G.board.includes(k)).map(([k,c])=>`<span><i style="background:${c.c}"></i>${esc(c.n.split(' :')[0])}</span>`).join('')}<span>👑 Comptoir : ${PRICE} 🪙</span></div>
  <div class="sjoin">Rejoindre : <b>${esc(joinURL().replace(/^https?:\/\//,''))}</b></div>`;
  G.P.forEach(sendMe);stMsg($('#stMsg')?$('#stMsg').textContent:'')}
@@ -955,12 +1021,13 @@ ACT.pause=()=>togglePause();
 ACT.pausemenu=()=>togglePause(true);
 ACT.quitask=()=>{const el=$('#pause .pbox');if(el)el.innerHTML=`<h2>Quitter ?</h2><p>La partie est sauvegardée sur cet ordinateur : vous pourrez la reprendre depuis le menu.</p><button class="btn pri" data-a="quit">Quitter</button><button class="btn" data-a="pausemenu">Annuler</button>`};
 ACT.quit=()=>hostQuit();
-function hostQuit(){if(G){sendAll({t:'v',v:{k:'msg',title:'Soirée terminée',sub:'L’écran a quitté la partie.'}})}GEN++;Object.keys(PEND).forEach(k=>delete PEND[k]);clearInterval(H.hbI);clearInterval(H.nsI);H.lc=null;PH.loop=null;PH.on=false;setTimeout(netHostClose,300);H.on=false;PAUSED=false;G=null;history.replaceState(null,'',location.pathname+location.search);scrMenu()}
+function hostQuit(){if(G){sendAll({t:'v',v:{k:'msg',title:'Soirée terminée',sub:'L’écran a quitté la partie.'}})}GEN++;Object.keys(PEND).forEach(k=>delete PEND[k]);clearInterval(H.hbI);clearInterval(H.nsI);clearInterval(H.chI);try{speechSynthesis.cancel()}catch(e){}H.lc=null;PH.loop=null;PH.on=false;setTimeout(netHostClose,300);H.on=false;PAUSED=false;G=null;history.replaceState(null,'',location.pathname+location.search);scrMenu()}
 
 /* --- boucle de jeu --- */
 async function introOrder(){const ps=G.order.map(byId);stMsg('La soirée commence !');
  ov(cardHTML('Ordre de passage','#FFC23D',`C’est parti pour ${G.set.rounds} tours !`,`<div class="olist">${ps.map((p,i)=>`<span class="orow"><b>${i+1}.</b>${chip(p)}</span>`).join('')}</div><div class="foot">Achetez des 👑 au Comptoir (${PRICE} jetons). Le plus de couronnes à la fin gagne.<br>Espace pour continuer</div>`));
  ps.forEach((p,i)=>setView(p,{k:'msg',title:'La soirée commence !',sub:`Tu joues en position ${i+1}. Garde ton téléphone allumé.`}));
+ G.P.filter(q=>q.bot).slice(0,2).forEach((b,i)=>say(b,'start',null,{force:1,delay:900+i*4200}));
  await wait(9000,true);ov('')}
 async function gameLoop(){
  while(G.round<=G.set.rounds){
@@ -974,9 +1041,12 @@ async function lastCall(){const s=ranked(),last=s[s.length-1];ov(cardHTML('Derni
 async function playerTurn(p){
  G.cur=p.id;stMsg(`Au tour de ${p.name}`);updateSide();
  G.P.forEach(q=>{if(q!==p)setView(q,{k:'msg',title:`Au tour de ${p.name}`,sub:'Regarde l’écran 👀'})});
+ if(p.bot)say(p,'myturn',null,{ch:.55});else{const b=randBot();if(b)say(b,'heckle',{n:p.name},{ch:.45})}
  await askChoice(p,{title:'À toi de jouer !',sub:'Lance le dé (1 à 10).',opts:[{id:'roll',l:'🎲 Lancer le dé',c:'#FF4F8B'}],timer:45,def:'roll',buzz:1});
  const n=ri(1,10);setView(p,{k:'msg',title:`Tu as fait ${n} !`,sub:'Ton pion avance…',dice:n});
- G.dice={v:n,roll:true};sfx('dice');await wait(1150);G.dice.roll=false;sfx('dice2');await wait(950);
+ G.dice={v:n,roll:true};sfx('dice');await wait(1150);G.dice.roll=false;sfx('dice2');
+ if(p.bot&&(n>=9||n<=2))say(p,n>=9?'rollhi':'rolllo',null,{force:1,ch:.8});else if(!p.bot&&n<=2){const b=randBot();if(b)say(b,'redother',{n:p.name},{ch:.3})}
+ await wait(950);
  await moveBy(p,n);G.dice=null;
  await resolveCase(p);
  G.cur=null;
@@ -987,12 +1057,12 @@ async function shopStop(p){
  ov(cardHTML('Le Comptoir','#FFC23D',`${esc(p.name)} peut acheter une couronne 👑`,`<div class="foot">${PRICE} jetons · il en a ${p.jet}</div>`));
  const mx=Math.min(3,Math.floor(p.jet/PRICE));
  const r=+(await askChoice(p,{title:'Le Comptoir 👑',sub:`${PRICE} jetons la couronne. Tu en as ${p.jet}.`,opts:Array.from({length:mx},(_,i)=>({id:String(i+1),l:`👑×${i+1} · ${(i+1)*PRICE} jetons`,c:'#C98A00'})).concat({id:'0',l:'Non merci'}),timer:20,def:String(mx),botDef:String(mx),buzz:1}));
- if(r>0&&p.jet>=r*PRICE){p.jet-=r*PRICE;p.cr+=r;sfx('crown');floatText(p,`+${r} 👑`,'#FFC23D');updateSide();ov(cardHTML(r>1?'Couronnes !':'Couronne !','#FFC23D',`${esc(p.name)} achète ${r>1?r+' couronnes':'une couronne'} ${'👑'.repeat(r)}`,'<div class="foot">Le Comptoir déménage…</div>'));await wait(2200,true);moveShop()}
+ if(r>0&&p.jet>=r*PRICE){p.jet-=r*PRICE;p.cr+=r;sfx('crown');say(p,'crown',null,{force:1,ch:.8});floatText(p,`+${r} 👑`,'#FFC23D');updateSide();ov(cardHTML(r>1?'Couronnes !':'Couronne !','#FFC23D',`${esc(p.name)} achète ${r>1?r+' couronnes':'une couronne'} ${'👑'.repeat(r)}`,'<div class="foot">Le Comptoir déménage…</div>'));await wait(2200,true);moveShop()}
  ov('');setView(p,{k:'msg',title:'Ton pion avance…',sub:''});
 }
 async function resolveCase(p){const t=G.board[p.pos],f=isFinal();
  if(t==='b'||t==='s'){gain(p,f?6:3);await wait(800);return}
- if(t==='r'){gain(p,-(f?6:3));p.st.red++;await wait(800);return}
+ if(t==='r'){gain(p,-(f?6:3));p.st.red++;if(p.bot)say(p,'red',null,{ch:.7});else{const b=randBot();if(b)say(b,'redother',{n:p.name},{ch:.5})}await wait(800);return}
  await caseIntro(t);
  await({va:caseVA,j:caseJNJ,q:caseQui,an:caseAnon,tm:caseTMC,ch:caseChance,du:caseDuel,dk:caseDrink,vt:caseVet,tf:caseTaffe})[t](p);
  ov('');
@@ -1010,6 +1080,7 @@ async function caseVA(p){
  const ch=await askChoice(p,{title:'Vérité ou action ?',opts:[{id:'v',l:'🗣️ Vérité',c:'#3E6FD8'},{id:'a',l:'🔥 Action',c:'#D83A72'}],timer:25,def:pick(['v','a']),buzz:1});
  const card=drawCard(ch,p),col=ch==='v'?'#4F8BFF':'#FF4F8B';
  ov(cardHTML(`${TYPES[ch]} · ${esc(p.name)}`,col,esc(card.x),`<div class="foot">Refuser = ${penTxt(3)} · Relever le défi = +5 jetons</div>`));sfx('card');
+ if(p.bot)say(p,ch==='v'?'vav':'vaa',null,{force:1,delay:500});else{const b=randBot();if(b)say(b,'vaother',{n:p.name},{ch:.6,delay:800})}
  let r=await askChoice(p,{title:TYPES[ch],sub:card.x,opts:[{id:'ok',l:'✔ C’est fait',c:'#1E9E5A'},{id:'no',l:`✗ Je refuse (${penTxt(3)})`,c:'#C43D3D'}],timer:150,def:'ok'});
  if(r==='ok'){const os=others(p).filter(q=>q.online||q.bot);if(os.length){
   ov(cardHTML(`${TYPES[ch]} · ${esc(p.name)}`,col,esc(card.x),`<div class="foot">Le groupe vote sur son téléphone : défi relevé ?</div>${WLF}`));
@@ -1024,6 +1095,7 @@ async function caseJNJ(p){
  const a=await askAll(ps,()=>({title:'Je n’ai jamais…',sub:card.x,opts:[{id:'d',l:'🙋 Moi si, déjà !',c:'#D83A72'},{id:'n',l:'😇 Jamais',c:'#3E6FD8'}]}),25,'n',wl);
  const yes=ps.filter(q=>a[q.id]==='d'),no=ps.filter(q=>a[q.id]!=='d');
  if(G.set.drink)yes.forEach(q=>pen(q,1));
+ {const by=yes.filter(q=>q.bot),bn=no.filter(q=>q.bot);if(by.length)say(pick(by),'jnjy',null,{ch:.85,delay:600});else if(bn.length)say(pick(bn),'jnjn',null,{ch:.5,delay:600})}
  ov(cardHTML('Je n’ai jamais','#B07CFF',esc(txt),`<div class="split"><div><h4>🙋 Déjà fait (${yes.length})</h4>${chips(yes)}</div><div><h4>😇 Jamais (${no.length})</h4>${chips(no)}</div></div>${G.set.drink&&yes.length?'<div class="foot">Ceux qui l’ont déjà fait boivent une gorgée 🍺</div>':''}`));
  sfx(yes.length?'win':'tick');gain(p,2);await wait(5000,true)}
 async function caseQui(p){
@@ -1034,6 +1106,7 @@ async function caseQui(p){
  const cnt={};Object.values(v).forEach(id=>{if(id)cnt[id]=(cnt[id]||0)+1});
  const mx=Math.max(0,...Object.values(cnt));const losers=mx?G.P.filter(q=>cnt[q.id]===mx):[];
  losers.forEach(q=>pen(q,n));
+ {const bv=ps.filter(q=>q.bot&&v[q.id]&&v[q.id]!==q.id);if(bv.length){const b=pick(bv),t=byId(v[b.id]);if(t)say(b,'vote',{n:t.name},{ch:.7,delay:700})}}
  const rows=G.P.filter(q=>cnt[q.id]).sort((a,b)=>cnt[b.id]-cnt[a.id]).map(q=>`<div class="vbar">${chip(q)}<div class="lv" style="--c:${q.color}"><i style="width:${cnt[q.id]/ps.length*100}%"></i><span>${cnt[q.id]}</span></div></div>`).join('');
  ov(cardHTML('Qui pourrait…','#3DE0D0',esc(txt),`<div class="vbars">${rows||'<p class="fine">Personne n’a voté.</p>'}</div>${losers.length?`<div class="foot">${losers.map(q=>esc(q.name)).join(' et ')} : ${penTxt(n)}</div>`:''}`));
  sfx('win');gain(p,2);await wait(5000,true)}
@@ -1053,13 +1126,14 @@ async function caseDrink(p){wheelWatch(p,'fait tourner la roue des gorgées 🍺
  else if(k===5){txt=`${chip(p)} : CUL SEC ! 🥃 (ou ${pen(p,5)})`}
  else if(k===6){const i=G.order.indexOf(p.id),q=byId(G.order[(i+1)%G.order.length]);txt=q&&q!==p?`${chip(q)}, le voisin, boit ${pen(q,2)}`:`${chip(p)} boit ${pen(p,2)}`}
  else{gain(p,3);txt=`Joker ! ${chip(p)} ne boit pas et gagne 3 jetons 🍀`}
- ov(cardHTML('Drink 🍺','#F5A623',txt,'<div class="foot">Les gorgées peuvent être de l’eau ou un soft.</div>'));sfx('coin');await wait(3800,true)}
+ ov(cardHTML('Drink 🍺','#F5A623',txt,'<div class="foot">Les gorgées peuvent être de l’eau ou un soft.</div>'));sfx('coin');{const b=randBot(p);if(b)say(b,'drink',{n:p.name},{ch:.65,delay:400})}await wait(3800,true)}
 async function caseVet(p){const lv=G.set.lvl;wheelWatch(p,'fait tourner la roue des vêtements 👕');
  const segs=[{l:'Chaussette 🧦',c:'#E0569B'},{l:'Accessoire 💍',c:'#9C4DCC'},{l:'Le haut 👕',c:'#D83A72',w:lv>=2?1:.3},{l:'Au choix 🎲',c:'#5C6BC0'},{l:'Le groupe choisit',c:'#C2185B',w:lv>=2?1:.4},{l:'Joker 🍀',c:'#5C6B7A',w:.7}];
  if(lv>=3)segs.splice(3,0,{l:'Le bas 👖',c:'#AD1457'});
  const k=await spinWheel(`Vêtement · ${esc(p.name)}`,'#E0569B',segs,'👕'),seg=segs[k];
  if(seg.l.startsWith('Joker')){gain(p,2);ov(cardHTML('Joker 🍀','#E0569B',`${chip(p)} garde tout sur soi et gagne 2 jetons`));await wait(3000,true);return}
  ov(cardHTML('Perte de vêtement 👕','#E0569B',`${chip(p)} retire : ${esc(seg.l)}`,`<div class="foot">Seulement si tu es à l’aise ! Refuser = ${penTxt(3)} · Jouer le jeu = +4 jetons</div>`));
+ {const b=p.bot?p:randBot();if(b)say(b,'vet',{n:p.name},{ch:.7,delay:500})}
  const r=await askChoice(p,{title:'Perte de vêtement 👕',sub:`À retirer : ${seg.l}. Uniquement si tu es à l’aise.`,opts:[{id:'ok',l:'✔ C’est fait',c:'#1E9E5A'},{id:'no',l:`✗ Je refuse (${penTxt(3)})`,c:'#C43D3D'}],timer:60,def:'ok',buzz:1});
  if(r==='ok'){gain(p,4);p.st.va++;sfx('win');ov(cardHTML('Ça chauffe 🔥','#E0569B',`${esc(p.name)} joue le jeu : +4 jetons`))}else{const t=pen(p,3);ov(cardHTML('Pénalité','#FF5A5A',`${esc(p.name)} : ${t}`))}
  await wait(2600,true)}
@@ -1069,6 +1143,7 @@ async function caseTaffe(p){wheelWatch(p,'fait tourner la roue de la fumée 🚬
  if(k===5){gain(p,2);ov(cardHTML('Joker 🍀','#8FA36E',`${chip(p)} passe son tour et gagne 2 jetons`));await wait(3000,true);return}
  const txt=k===2?`${chip(p)} tire une taffe et fait tourner à ${chip(X)}`:k===3?'Tout le monde tire une taffe 💨':k===4?`${chip(p)} doit tenter un rond de fumée 💨`:`${chip(p)} : ${esc(seg.l)}`;
  ov(cardHTML('Taffe 🚬','#8FA36E',txt,`<div class="foot">Clope, vape, chicha… ou une gorgée de soft si tu ne fumes pas. Refuser = ${penTxt(2)} · Jouer = +3 jetons</div>`));
+ {const b=p.bot?p:randBot();if(b)say(b,'taffe',{n:p.name},{ch:.6,delay:500})}
  const r=await askChoice(p,{title:'Taffe 🚬',sub:`${seg.l}. Tu ne fumes pas ? Une gorgée de soft compte aussi.`,opts:[{id:'ok',l:'✔ C’est fait',c:'#1E9E5A'},{id:'no',l:`✗ Je passe (${penTxt(2)})`,c:'#C43D3D'}],timer:60,def:'ok',buzz:1});
  if(r==='ok'){gain(p,3);sfx('win')}else pen(p,2);
  ov(cardHTML(r==='ok'?'💨 Fait !':'Pénalité',r==='ok'?'#8FA36E':'#FF5A5A',r==='ok'?`${esc(p.name)} gagne 3 jetons`:`${esc(p.name)} : ${penTxt(2)}`));await wait(2400,true)}
@@ -1153,10 +1228,13 @@ async function runMG(g,ids,duel){const m=MG[g],ps=ids.map(byId).filter(Boolean);
  sfx('card');
  G.P.filter(q=>!ids.includes(q.id)).forEach(q=>setView(q,{k:'msg',title:'Duel en cours ⚔',sub:`${ps.map(p=>p.name).join(' contre ')} à « ${m.n} ». Regarde l’écran !`}));
  await askAll(ps.filter(active),()=>({title:m.n,sub:m.r,opts:[{id:'ok',l:'✋ Je suis prêt',c:'#1E9E5A'}]}),30,'ok',wl);
- const res=await m.run(ps);G.mgIn=null;return res}
+ {const b=pick(ps.filter(q=>q.bot));if(b)say(b,'mgstart',null,{ch:.5})}
+ G.mgOn=ps.map(q=>q.id);let res;try{res=await m.run(ps)}finally{G.mgOn=null}G.mgIn=null;return res}
 async function mgResults(res,title,lab){let pos=0;const rows=[];
  res.rank.forEach(gr=>{gr.forEach(id=>{const p=byId(id);if(!p)return;rows.push(`<div class="rrow ${pos===0?'win':''}"><span class="rp">${pos+1}</span>${chip(p)}<span class="rs">${esc(res.sc[id]||'')}</span><span class="rr">${lab?lab(id,pos):''}</span></div>`);setView(p,{k:'msg',title:pos===0?'🏆 1er !':`${pos+1}e`,sub:(res.sc[id]||'')+(lab&&lab(id,pos)?' · '+lab(id,pos).replace(/<[^>]+>/g,''):'')})});pos+=gr.length});
  mgShow(`<div class="mgres"><h2>${title}</h2>${rows.join('')}<div class="foot" style="text-align:center">Espace pour continuer</div></div>`);sfx('win');
+ {const w=res.rank[0]||[],all=res.rank.flat(),lw=res.rank.length>1?res.rank[res.rank.length-1]:[],wb=w.map(byId).filter(q=>q&&q.bot),lb=lw.map(byId).filter(q=>q&&q.bot),wn=byId(w[0]);
+  if(wb.length&&(Math.random()<.6||!lb.length))say(pick(wb),'win',null,{force:1,delay:500});else if(lb.length)say(pick(lb),'lose',wn&&!wn.bot?{n:wn.name}:null,{force:1,delay:500})}
  await wait(6500,true);mgHide()}
 async function miniGameRound(){
  const all=Object.keys(MG).filter(mgOK),fr=all.filter(k=>!(G.lastMG||[]).includes(k)),pool=fr.length?fr:all;
@@ -1554,7 +1632,8 @@ async function endGame(){G.over=true;LS.set('tournee.save',null);G.cur=null;stMs
   await wait(1600);ws.forEach(p=>{p.cr++;floatText(p,'+1 👑','#FFC23D')});if(ws.length)sfx('crown');updateSide();await wait(3200,true)}
  const s=ranked(),top=s.slice(0,3),H3=[150,110,80],C3=['#FFC23D','#C9CED8','#D08A4E'];
  ov(`<div class="card" style="--k:#FFC23D"><div class="tag">Fin de la soirée</div><div class="txt">🏆 ${esc(s[0].name)} remporte La Tournée !</div><div class="podium">${[1,0,2].filter(i=>top[i]).map(i=>`<div class="pod"><span class="av" style="--c:${top[i].color}">${avHTML(top[i])}</span><b>${esc(top[i].name)}</b><small>👑 ${top[i].cr} · 🪙 ${top[i].jet}</small><div class="blk" style="height:${H3[i]}px;background:${C3[i]}">${i+1}</div></div>`).join('')}</div>${s.length>3?`<div class="foot">${s.slice(3).map((p,i)=>`${i+4}. ${esc(p.name)} (👑 ${p.cr} · 🪙 ${p.jet})`).join(' · ')}</div>`:''}<div class="row wrap" style="justify-content:center;margin-top:18px"><button class="btn pri big" data-a="replay">🔁 Rejouer avec les mêmes joueurs</button><button class="btn big" data-a="quit">Menu</button></div></div>`);
- sfx('crown');s.forEach((p,i)=>setView(p,{k:'msg',title:i===0?'🏆 Tu remportes la soirée !':`Tu termines ${i+1}e`,sub:`👑 ${p.cr} · 🪙 ${p.jet}`}))}
+ sfx('crown');if(s[0].bot)say(s[0],'endw',null,{force:1,delay:800});else{const b=randBot();if(b)say(b,'endl',{n:s[0].name},{force:1,delay:800})}
+ s.forEach((p,i)=>setView(p,{k:'msg',title:i===0?'🏆 Tu remportes la soirée !':`Tu termines ${i+1}e`,sub:`👑 ${p.cr} · 🪙 ${p.jet}`}))}
 ACT.replay=()=>hostLobby(G.code,true);
 
 /* ===================== plateau (canvas) ===================== */
@@ -1650,7 +1729,11 @@ function phRecv(d){if(!PH.on||!d)return;PH.lastHb=Date.now();
   case'v':phView(d.v);break;
   case'scr':if(PH.nos)phScr(d.k,d.h);break;
   case'mgu':{const r=$('#joyr');if(r){r.textContent=PH.nos?ECR(d.role||''):(d.role||'');r.style.color=typeof d.col==='string'&&/^#[0-9A-Fa-f]{6}$/.test(d.col)?d.col:''}if(d.buzz)try{navigator.vibrate&&navigator.vibrate(d.buzz)}catch(e){}break}
-  case'brd':if(PH.nos)phBrd(d);break}}
+  case'brd':if(PH.nos)phBrd(d);break
+  case'say':phSay(d);break}}
+function phSay(d){if(typeof d.x!=='string'||typeof d.id!=='string')return;const r=PH.ro[d.id]||{};let el=$('#pchat');if(!el){el=document.createElement('div');el.id='pchat';document.body.appendChild(el)}
+ const b=document.createElement('div');b.className='bub';b.style.setProperty('--c',COLORS.includes(r.color)?r.color:'#888');b.innerHTML=`${phAv(d.id,'s')}<div><b>${esc(r.name||'Bot')} 🤖</b><span>${esc(d.x.slice(0,220))}</span></div>`;
+ el.appendChild(b);while(el.children.length>2)el.firstChild.remove();const life=Math.max(4200,d.x.length*75);setTimeout(()=>b.classList.add('out'),life);setTimeout(()=>b.remove(),life+320)}
 function phAv(pid,cls){const r=PH.ro[pid]||{},ph=PH.photos[pid];return`<span class="av ${cls||'s'}" style="--c:${COLORS.includes(r.color)?r.color:'#888'}">${ph?`<img src="${ph}" alt="">`:`<span>${esc(r.emoji||'?')}</span>`}</span>`}
 function phHeader(){const el=$('#phh');if(!el)return;const me=PH.ro[PH.pid];
  if(!me){el.innerHTML=`<b>La Tournée · ${esc(PH.code||'')}</b>`;return}
